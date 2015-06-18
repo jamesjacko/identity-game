@@ -1,0 +1,66 @@
+body{
+	margin: 0;
+	background: #272822;
+}
+#padd{
+	width: 691px;
+	height: 80px;
+	background: #272822  no-repeat 10px;
+
+	padding:10px 10px 10px 99px;
+}
+#game-messages{
+	color: #A4E402;
+	font: normal 14px/1.5 "Courier New";
+	overflow: scroll;
+	height: 80px;
+}
+#game-messages p{
+	margin:0;
+}
+#grats, #welcome{
+	background: #272822;
+	width: 90%;
+	padding:0 5%;
+	height: 100%;
+	position: absolute;
+	top:0px;
+	left:0px;
+	visibility: hidden;
+}
+#welcome{
+	visibility: visible;
+}
+#gratsMessage, #welcomeMessage{
+	color: #A4E402;
+	font: normal 25px/1.5 "Courier New";
+	text-align: center;
+	padding:100px 0 0;
+	/*text-transform: lowercase;*/
+}
+#gratsMessage u, #welcomeMessage u{
+	width:250px;
+	height:50px;
+	line-height:50px;
+	font-size:24px;
+	text-align:center;
+	display: block;
+	background:#5ED9F1;
+	color: #272822;
+	margin:20px auto;
+	text-decoration: none;
+	font-weight: bold;
+	cursor:pointer;
+}
+#gratsMessage u:hover, #welcomeMessage u:hover{
+	color: #FFF;
+}
+.m{
+	color:#5ED9F1;
+}
+.f{
+	color:#FC1F70;
+}
+.r{
+	color:#E6DC67;
+}
