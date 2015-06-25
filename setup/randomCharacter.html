@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Get random character</title>
+	<script src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+	<script type="text/javascript">
+		var go = function(){
+			ref = new Firebase("https://identity-game.firebaseio.com/");
+			setInterval(function(){update();}, 10);
+		}
+		var update = function(){
+			
+			var childRef = ref.child("IdentityTree");
+			childRef = childRef.orderByValue();
+			
+			childRef.once('value', function(snapshot){
+				count = 0;
+				smallest = 0;
+				snapshot.forEach(function(ss){
+					if(count == 0){ 
+						smallest = ss.val();
+					}
+					count++;
+				});
+				var smallRef = childRef.equalTo(smallest);
+				smallRef.once('value', function(newSS){
+					var i = 0;
+					var rand = Math.floor(Math.random() * newSS.numChildren());
+					newSS.forEach(function(snapshot) {
+					  if (i == rand) {
+					  	var randRef = snapshot.ref();
+					  	randRef = randRef.parent();
+					  	newObj = {};
+					  	newObj[snapshot.key()] = snapshot.val() + 1;
+					  	randRef.update(newObj);
+						// randRef.update(obj);
+					  }
+					  i++;
+					});
+				});
+			})
+		}
+	</script>
+</head>
+<body onload="go()">
+<p id="push"></p>
+</body>
+</html>
