@@ -20,23 +20,47 @@ var Follower = function(game, texture, ft){
 
   this.width = 38;
   this.height = 36;
+
   
-  if(followerType === 0){
-    console.log("m");
-    this.animations.add('go', [
-          'follower_m.png',
-          'follower_ma.png',
-    ], 10, true, false);
-  } else if(followerType === 1){
-    console.log(followerType);
-    this.animations.add('go', [
-          'follower_f.png',
-          'follower_fa.png',
-    ], 10, true, false);
+  
+  if(game.companionGene.species === "robot"){
+    if(game.companionGene.colors === "neutral"){
+      this.animations.add('go', [
+            'rn.png',
+            'rna.png',
+      ], 10, true, false);
+    } else {
+      this.animations.add('go', [
+            'r.png',
+            'ra.png',
+      ], 10, true, false);
+    }
   } else {
+    var gen = "";
+    var col = "";
+    switch(game.companionGene.sex){
+      case "male":
+        gen = "m";
+        break;
+      case "female":
+        gen = "f";
+        break;
+      case "androgynous":
+        gen = "a";
+        break;
+    }
+    switch(game.companionGene.colors){
+      case "switched":
+        col = "s";
+        break;
+      case "neutral":
+        col = "n";
+        break;
+    }
+    var fn = gen + col;
     this.animations.add('go', [
-          'follower_r.png',
-          'follower_ra.png',
+          fn + '.png',
+          fn + 'a.png',
     ], 10, true, false);
   }
 

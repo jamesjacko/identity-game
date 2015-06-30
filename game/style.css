@@ -18,6 +18,14 @@ body{
 #game-messages p{
 	margin:0;
 }
+#game-messages i{
+	width:79px;
+	height:80px;
+	position:absolute;
+	left:0px;
+	top:0x;
+	overflow: hidden;
+}
 #grats, #welcome{
 	background: #272822;
 	width: 90%;
@@ -55,12 +63,43 @@ body{
 #gratsMessage u:hover, #welcomeMessage u:hover{
 	color: #FFF;
 }
-.m{
+.gender-appropriate .m{
 	color:#5ED9F1;
 }
-.f{
+.switched .m{
 	color:#FC1F70;
 }
-.r{
+.neutral .m{
+	color: #FFF;
+}
+.gender-appropriate .f{
+	color:#FC1F70;
+}
+.switched .f{
+	color:#5ED9F1;
+}
+.neutral .f{
+	color:#FFF;
+}
+.gender-appropriate .r, .switched .r{
 	color:#E6DC67;
+}
+.neutral .r{
+	color:#FFF;
+}
+.a{
+	color:#FFF;
+}
+
+.male.gender-appropriate #game-messages i, .male.switched #game-messages i{
+	background: #5ED9F1;
+}
+.male.switched #game-messages i, .female.gender-appropriate #game-messages i{
+	background: #FC1F70;
+}
+.robot #game-messages i{
+	background:#E6DC67;
+}
+.neutral #game-messages i{
+	background: #FFF;
 }

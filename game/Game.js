@@ -1,35 +1,97 @@
 $(window).bind("load", function() {
-  followerType = Math.floor((Math.random() * 3));
 
-  followerObj = {
-    moniker: "AH-BOT 897",
-    pronoun: "it",
-    death: "is destroyed",
-    classer: "r"
+  var getGene = function(){
+    ref = new Firebase("https://identity-game.firebaseio.com/");
+    var childRef = ref.child("IdentityTree");
+    var gene;
+    childRef = childRef.orderByValue();
+    
+    childRef.once('value', function(snapshot){
+      count = 0;
+      smallest = 0;
+      snapshot.forEach(function(ss){
+        if(count === 0){
+          smallest = ss.val();
+        }
+        count++;
+      });
+      var smallRef = childRef.equalTo(smallest);
+      smallRef.once('value', function(newSS){
+        var i = 0;
+        var rand = Math.floor(Math.random() * newSS.numChildren());
+        newSS.forEach(function(snapshot) {
+          if (i == rand) {
+            var randRef = snapshot.ref();
+            randRef = randRef.parent();
+            newObj = {};
+            newObj[snapshot.key()] = snapshot.val() + 1;
+            randRef.update(newObj);
+            followerGene = snapshot.key();
+            setupGame();
+          }
+          i++;
+        });
+      });
+    });
+    return gene;
   }
-  if(followerType < 2){
-    followerObj.moniker = (followerType == 0) ? "Timmy" : "Daisy";
-    followerObj.pronoun = (followerType == 0) ? "him" : "her";
-    followerObj.classer = (followerType == 0) ? "m" : "f";
-    followerObj.death = "dies"
-  }
+  getGene();
 
 
-  document.getElementById("compName").innerHTML = followerObj.moniker;
-  document.getElementById("compName2").innerHTML = followerObj.moniker;
-  document.getElementById("compPN").innerHTML = followerObj.pronoun;
-  document.getElementById("compDeath").innerHTML = followerObj.death;
-  $("#compName, #compName2").addClass(followerObj.classer);
-  runGame();
+  
 
 });
+
+
+var setupGame = function(){
+    var companionGene = decodeGene(followerGene);
+    followerType = Math.floor((Math.random() * 3));
+
+    followerObj = {
+      moniker: "AH-BOT 897",
+      pronoun: "it",
+      death: "is destroyed",
+      classer: "r"
+    };
+
+    $("body").addClass(companionGene.sex + " " + companionGene.colors + " " + companionGene.species);
+    if(companionGene.species !== "robot"){
+      switch(companionGene.sex){
+        case "male":
+          followerObj.moniker = "Timmy";
+          followerObj.pronoun = "him";
+          followerObj.classer = "m";
+          break;
+        case "female":
+          followerObj.moniker = "Daisy";
+          followerObj.pronoun = "her";
+          followerObj.classer = "f";
+          break;
+        case "androgynous":
+          followerObj.moniker = "Sam";
+          followerObj.pronoun = "them";
+          followerObj.classer = "a";
+          break;
+      }
+      followerObj.death = "dies"
+    }
+
+
+    document.getElementById("compName").innerHTML = followerObj.moniker;
+    document.getElementById("compName2").innerHTML = followerObj.moniker;
+    document.getElementById("compPN").innerHTML = followerObj.pronoun;
+    document.getElementById("compDeath").innerHTML = followerObj.death;
+    $("#compName, #compName2").addClass(followerObj.classer);
+    runGame(companionGene);
+
+  }
 
 var go = function(){
   game.paused = false;
   document.getElementById("welcome").style.display = "none";
 }
 
-var runGame = function(){
+var runGame = function(companionGene){
 
   
   var width = 100;
@@ -40,7 +102,8 @@ var runGame = function(){
   
 
   game = new Phaser.Game(800, 500, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update, render: render });
-
+  game.companionGene = companionGene;
+  console.log(game.companionGene);
   game.killedGuys = [];
   game.reactionTimes = [];
   game.followerDistance = 0;
@@ -65,7 +128,7 @@ var runGame = function(){
     // game.load.image('follower2', 'images/follower_r.png');
     game.load.image('arrowGreen', 'images/arrowGreen.png');
     game.load.atlasJSONHash('arrow', 'images/arrowNew.png', 'images/arrow.json');
-    game.load.atlasJSONHash('followers', 'images/followers.png', 'images/followers.json');
+    game.load.atlasJSONHash('followers', 'images/followersn.png', 'images/followersn.json');
     game.load.audio('bg', 'images/bg.ogg');
     game.load.audio('attack', 'images/attack.ogg');
     game.time.advancedTiming = true;
@@ -112,10 +175,35 @@ var runGame = function(){
     game.bgmusic = game.add.audio("bg");
     game.bgmusic.loop = true;
     game.attackmusic = game.add.audio("attack");
-    
-    
+    var gen = "";
+    switch(game.companionGene.sex){
+      case "male":
+        gen = "0";
+        break;
+      case "female":
+        gen = "1";
+        break;
+      case "androgynous":
+        gen = "3";
+        break;
+    }
+    var child = (game.companionGene.age === "adult")? "" : "1";
+
     
 
+    if(game.companionGene.vis === "silhouette"){
+      if(game.companionGene.species === "robot"){
+        gen = "2";
+        child = "";
+      }
+      if(game.companionGene.sex === "androgynous")
+        child = "";
+      $("#game-messages i").append("<img src = \"images/profile"+gen + child+".png\">");
+    } else if (game.companionGene.species == "human") {
+      $("#game-messages i").append("<img src = \"images/picture"+gen + child+".png\">");
+    } else {
+      $("#game-messages i").append("<img src = \"images/picturer"+gen + child+".png\">");
+    }
     document.getElementById("padd").style.backgroundImage = "url('images/profile"+followerType+".jpg')";
 
     game.follower = new Follower(game, 'follower' + followerType, followerType);
@@ -194,4 +282,42 @@ var runGame = function(){
 window.onunload = function(){
   game.destoy(true);
   delete game;
+}
+
+
+var decodeGene = function(gene){
+  companionGene = {};
+  var geneStr = gene.toString();
+  // picture-silhouette
+  companionGene.vis = geneStr[0] == 0? "picture" : "silhouette";
+  // human-robot
+  companionGene.species =  geneStr[1] == 0? "human" : "robot";
+  // male-female-and
+  switch(geneStr[2]){
+    case "0":
+      companionGene.sex = "male";
+      break;
+    case "1":
+      companionGene.sex = "female";
+      break;
+    case "2":
+      companionGene.sex = "androgynous";
+      break;
+  }
+  // ga-switched-neutral
+  switch(geneStr[3]){
+    case "0":
+      companionGene.colors = "gender-appropriate";
+      break;
+    case "1":
+      companionGene.colors = "switched";
+      break;
+    case "2":
+      companionGene.colors = "neutral";
+      break;
+  }
+  // adult-child
+  companionGene.age =  geneStr[4] == 0? "adult" : "child";
+
+  return companionGene;
 }
