@@ -5,7 +5,7 @@ $(window).bind("load", function() {
     var childRef = ref.child("IdentityTree");
     var gene;
     childRef = childRef.orderByValue();
-    
+
     childRef.once('value', function(snapshot){
       count = 0;
       smallest = 0;
@@ -38,7 +38,7 @@ $(window).bind("load", function() {
   getGene();
 
 
-  
+
 
 });
 
@@ -86,20 +86,58 @@ var setupGame = function(){
 
   }
 
+
+var continueForward = function(){
+  go = false;
+  game.initial = {};
+
+  $("u[data-name='sex']").each(function(){
+    if($(this).hasClass('active')){
+      go = true;
+      game.initial.sex = $(this).attr("data");
+    }
+  });
+  if(go){
+    go = false;
+    $("u[data-name='ip']").each(function(){
+      if($(this).hasClass('active')){
+        go = true;
+        game.initial.ip = $(this).attr("data");
+      }
+    });
+  } else {
+    alert("Please select your sex.");
+    return;
+  }
+  if(go){
+    game.initial.email = $("#email").val();
+    $("#details").animate({
+      top: -2000
+    }, 500, function(){
+
+    });
+  } else {
+    alert("Please select whether you want us to keep your ip address or not");
+    return
+  }
+}
+
 var go = function(){
   game.paused = false;
   document.getElementById("welcome").style.display = "none";
 }
 
+
+
 var runGame = function(companionGene){
 
-  
+
   var width = 100;
   var height = 100;
   var counter = 0;
 
-  
-  
+
+
 
   game = new Phaser.Game(800, 500, Phaser.CANVAS, 'game', { preload: preload, create: create, update: update, render: render });
   game.companionGene = companionGene;
@@ -189,7 +227,7 @@ var runGame = function(companionGene){
     }
     var child = (game.companionGene.age === "adult")? "" : "1";
 
-    
+
 
     if(game.companionGene.vis === "silhouette"){
       if(game.companionGene.species === "robot"){
@@ -240,7 +278,8 @@ var runGame = function(companionGene){
       document.getElementById("grats").style.visibility = "visible";
       document.getElementById("gratsScore").innerHTML = (game.follower.health < 1)?  game.killCount - 25 : game.killCount;
       var data = {
-        followerType: followerType,
+        initialInfo: game.initial,
+        followerType: game.companionGene,
         time: game.time.time - starttime,
         score: game.killCount,
         companionSurvived: game.follower.health > 0,
@@ -249,7 +288,7 @@ var runGame = function(companionGene){
         aveDistance: game.followerDistance / game.fCount,
         bulletCounts: game.bulletCounts
       }
-      var firebaseRef = new Firebase("https://empathygame.firebaseio.com/");
+      var firebaseRef = new Firebase("https://identity-game.firebaseio.com/plays");
       firebaseRef.push(data);
       game.paused = true;
     } else {
@@ -264,7 +303,7 @@ var runGame = function(companionGene){
 
     if(game.follower.health === 0)
       game.follower.kill();
-  
+
     game.followerDistance += Math.abs(game.physics.arcade.distanceBetween(game.player, game.follower));
   }
 

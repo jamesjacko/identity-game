@@ -18,7 +18,22 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+    <div id="details">
 
+      <div id="detailsMessage">Sex<br />
+        <u data="male" data-name="sex" class="details_button">Male</u><u data="female" data-name="sex" class="details_button">Female</u><u data="other" data-name="sex" class="details_button">Other</u><u data="not-supplied" data-name="sex" class="details_button">Prefer not to say</u>
+      <br />
+      <em>(optional) </em>To find out the results of this study as well as to allow you to keep up to date with further studies please supply your email.<br />
+      <input type="text" name="email" id="email" />
+      <br />
+      We would also like to log your ip address in order to allow us to decipher unique plays of the game. Your ip address will be encrypted using SHA-256 and will therefore be indecipherable in transit to and within the data store. Is this ok?
+      <br />
+      <u data="yes" data-name="ip" class="details_button">Yes</u>
+      <u data="no" data-name="ip" class="details_button">No</u>
+      <br />
+      <u onclick="continueForward();">Continue ></u>
+      </div>
+    </div>
     <div id="welcome">
         <div id="welcomeMessage" onclick="go();"><strong>War Web</strong><br /><span id="compName"></span> has been sent to a remote server on the digital WarWeb to investigate how the Killer Code bots have been taking over cyberspace; you have been sent to protect <span id="compPN"></span> during their mission.... It was going to be easy, a babysitting exercise, until the KC bots arrived... Now you just need to survive.<br/><br/>You companion's profile image and indicator will flash when they are being attacked<br/><br/>If <span id="compName2"></span> <span id="compDeath"></span>, you loose 25 points<br /><u>play</u></div>
     </div>

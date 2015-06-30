@@ -8,7 +8,7 @@ var Hero = function(game, texture, god){
   this.onWater = false;
   this.god = god;
 
-  
+
 
   Phaser.Sprite.call(this, game, 400, 400, texture);
 
@@ -27,7 +27,7 @@ var Hero = function(game, texture, god){
   this.followermarker.animations.play('go');
   this.followermarker = game.add.existing(this.followermarker);
 
-  
+
 
   this.followermarker.anchor.setTo(0.5, 0.5);
   this.followermarker.kill();
@@ -40,7 +40,7 @@ var Hero = function(game, texture, god){
   this.healthBar.anchor.setTo(0, 0);
 
   game.physics.enable(this.healthBar);
-  
+
 
   game.physics.enable(this);
   game.camera.follow(this);
@@ -62,7 +62,7 @@ var Hero = function(game, texture, god){
   // ad callbacks to button presses space and m button
   this.cursors = game.input.keyboard.createCursorKeys();
   this.fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-  this.mineButton = game.input.keyboard.addKey(Phaser.Keyboard.M);
+  //this.mineButton = game.input.keyboard.addKey(Phaser.Keyboard.M);
   this.fireButton.onDown.add(this.fire, this);
   this.mineButton.onDown.add(this.placeMine, this);
 

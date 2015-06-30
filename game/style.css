@@ -25,28 +25,36 @@ body{
 	left:0px;
 	top:0x;
 	overflow: hidden;
+	z-index:1;
 }
-#grats, #welcome{
+#grats, #welcome, #details{
 	background: #272822;
 	width: 90%;
 	padding:0 5%;
 	height: 100%;
 	position: absolute;
 	top:0px;
+	z-index: 2;
 	left:0px;
 	visibility: hidden;
 }
-#welcome{
+#welcome, #details{
 	visibility: visible;
 }
-#gratsMessage, #welcomeMessage{
+#details{
+	z-index: 3;
+}
+#gratsMessage, #welcomeMessage, #detailsMessage{
 	color: #A4E402;
 	font: normal 25px/1.5 "Courier New";
 	text-align: center;
 	padding:100px 0 0;
 	/*text-transform: lowercase;*/
 }
-#gratsMessage u, #welcomeMessage u{
+#detailsMessage{
+	padding:20px 0 0;
+}
+#gratsMessage u, #welcomeMessage u, #details u{
 	width:250px;
 	height:50px;
 	line-height:50px;
@@ -60,8 +68,33 @@ body{
 	font-weight: bold;
 	cursor:pointer;
 }
-#gratsMessage u:hover, #welcomeMessage u:hover{
+#email{
+	width:450px;
+	height:50px;
+	line-height:50px;
+	font-size:24px;
+	font-family: "Courier New";
+	text-align:center;
+	display: block;
+	margin:20px auto 0px;
+	padding:0;
+	border:0;
+	text-decoration: none;
+	font-weight: bold;
+	cursor:pointer;
+}
+#gratsMessage u:hover, #welcomeMessage u:hover, #details u:hover{
 	color: #FFF;
+}
+#details u{
+	display: inline-block;
+	width:220px;
+	margin-left:5px;
+	margin-right:5px;
+	font-size:20px;
+}
+#details u.active{
+	background: #A4E402;
 }
 .gender-appropriate .m{
 	color:#5ED9F1;
@@ -100,6 +133,6 @@ body{
 .robot #game-messages i{
 	background:#E6DC67;
 }
-.neutral #game-messages i{
+.neutral #game-messages i, .androgynous #game-messages i{
 	background: #FFF;
 }

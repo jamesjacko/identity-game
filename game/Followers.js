@@ -21,8 +21,8 @@ var Follower = function(game, texture, ft){
   this.width = 38;
   this.height = 36;
 
-  
-  
+
+
   if(game.companionGene.species === "robot"){
     if(game.companionGene.colors === "neutral"){
       this.animations.add('go', [
@@ -65,7 +65,7 @@ var Follower = function(game, texture, ft){
   }
 
   this.animations.stop('go', true);
-  
+
 
   this.helpwait = 60;
   this.speed = 80;
@@ -94,10 +94,10 @@ var Follower = function(game, texture, ft){
 
   var _this = this;
 
-  
-  
+
+
   // Call the Sprite constructor using the JS.prototype call function
-  
+
 
   //set central anchor point.
 
@@ -113,7 +113,7 @@ var Follower = function(game, texture, ft){
   }
 
   this.helpme = function(_this){
-    if(followerType === 2){
+    if(game.companionGene.species === "robot"){
       game.broadcast("** Under Attack **");
     } else {
       game.broadcast(_this.helpalerts[Math.floor(Math.random() * (Object.keys(_this.helpalerts).length - 1))]);
@@ -125,7 +125,7 @@ var Follower = function(game, texture, ft){
 
 
   //game.camera.follow(this);
-  
+
 }
 
 /*
@@ -139,7 +139,7 @@ Follower.prototype = Object.create(Phaser.Sprite.prototype);
 Follower.prototype.constructor = Follower;
 
 function changeBG(){
-  
+
 
   if(game.follower.switcher === 1){
     document.getElementById("padd").style.backgroundImage = "url(images/profile"+followerType+"a.jpg)";
@@ -157,7 +157,7 @@ Follower.prototype.update = function(){
   ask({prob: 20, func: updateHeading, params: this});
   wander(this, game);
   if(this.underAttack){
-    
+
     if(this.attackStart === 0){
       this.attackStart = game.time.time
       bgChanger = setInterval(function(){ changeBG() }, 200);
@@ -202,7 +202,7 @@ Follower.prototype.update = function(){
       document.getElementById("padd").style.backgroundImage = "url('images/profile"+followerType+".jpg')"
     }
     game.clearConsole();
-    
+
   }
 }
 
@@ -213,7 +213,7 @@ var Followers = function(game, amnt, texture){
     x: 0,
     y: 0
   }
-  
+
   for(var i = 0; i < amnt; i++){
     var follower = new Follower(game, texture, i);
     var sprite = this.add(follower);
